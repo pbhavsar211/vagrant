@@ -12,6 +12,7 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
+  config.vm.hostname = "centos7-docker-host-paresh"
   config.vm.box = "developervms/centos7-64"
 
   # Disable automatic box update checking. If you disable this, then
@@ -69,7 +70,7 @@ Vagrant.configure(2) do |config|
   #   sudo apt-get install -y apache2
   # SHELL
 
-  config.vm.provision :shell, path: "bootstrap.sh"
+  #config.vm.provision :shell, path: "bootstrap.sh"
   # this will do network port forwarding ... service httpd does not start automatically though we need to run
   # command like sysctl httpd start
   config.vm.network :forwarded_port, host: 4567, guest: 80
@@ -77,9 +78,10 @@ Vagrant.configure(2) do |config|
   # puppet provisioning
 
   config.vm.provision "puppet" do |puppet|
-    # setting up manifest_path is deprecated.
-    #puppet.manifests_path = "manifests"
-    puppet.manifest_file = "default.pp"
+    puppet.manifests_path = "manifests"
+    puppet.manifest_file = "site.pp"
+    puppet.module_path = "modules"
+    puppet.options = "--verbose --debug"
   end
 
 end
